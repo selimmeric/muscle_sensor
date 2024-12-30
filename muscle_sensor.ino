@@ -39,8 +39,8 @@ unsigned long previousServoMillis = 0;  // the time when the servo was last move
 
 static tinyCommand cmd(Serial);
 // Kalman filtresi
-long val=0; 
-float estimated_hand=0;
+long muscle_raw_value=0; 
+float estimated_muscle_value=0;
 
  SimpleKalmanFilter KalmanFilter(1, 1, 0.01);
 // Global command variable.
@@ -78,7 +78,7 @@ void loop() {
   currentMillis = millis();  // capture the latest value of millis()
   servoSweep();
   muscle_raw_value = analogRead(A0); // sensör verisi
-  estimated_hand = KalmanFilter.updateEstimate(muscle_raw_value); // filtrelenmiş sensör verisi
+  estimated_muscle_value = KalmanFilter.updateEstimate(muscle_raw_value); // filtrelenmiş sensör verisi
 }
 void help(){
     Serial.println("Terminal Komut Listesi");
@@ -104,7 +104,7 @@ void serialOut(){
     Serial.print("256,100,");
     Serial.print(muscle_raw_value);
     Serial.print(",");
-    Serial.println(estimated_hand);
+    Serial.println(estimated_muscle_value);
 }
 int16_t set_param(int argc, char **argv) {
   int stat = 1;
